@@ -70,26 +70,32 @@ jq -f /mapper.jq /genesis-input.json > /genesis.json
 echo "Supplied genesis state:"
 cat /genesis.json
 
+ls -hal $reth
+
+$reth --help
+
 echo "Command flags till now:"
 echo $FLAGS
 
 # Initialize the local testchain with the genesis state
-# TODO
-#echo "Initializing database with genesis state..."
-#$reth $FLAGS init /genesis.json
+echo "Initializing database with genesis state..."
+$reth $FLAGS init --chain /genesis.json
+
+# make sure we use the same genesis each time
+FLAGS="$FLAGS --chain /genesis.json"
 
 # Don't immediately abort, some imports are meant to fail
 set +e
 
 # Load the test chain if present
 # TODO
-#echo "Loading initial blockchain..."
-#if [ -f /chain.rlp ]; then
-#    echo "Loading initial blockchain..."
-#    $reth $FLAGS import /chain.rlp
-#else
-#    echo "Warning: chain.rlp not found."
-#fi
+echo "Loading initial blockchain..."
+if [ -f /chain.rlp ]; then
+    echo "Loading initial blockchain..."
+    $reth $FLAGS --import /chain.rlp
+else
+    echo "Warning: chain.rlp not found."
+fi
 
 # Load the remainder of the test chain
 # TODO
