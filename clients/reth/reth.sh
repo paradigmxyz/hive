@@ -79,7 +79,7 @@ echo $FLAGS
 
 # Initialize the local testchain with the genesis state
 echo "Initializing database with genesis state..."
-$reth $FLAGS init --chain /genesis.json
+$reth init $FLAGS --chain /genesis.json
 
 # make sure we use the same genesis each time
 FLAGS="$FLAGS --chain /genesis.json"
@@ -92,7 +92,7 @@ set +e
 echo "Loading initial blockchain..."
 if [ -f /chain.rlp ]; then
     echo "Loading initial blockchain..."
-    $reth $FLAGS --import /chain.rlp
+    $reth node $FLAGS --import /chain.rlp
 else
     echo "Warning: chain.rlp not found."
 fi
@@ -104,13 +104,13 @@ fi
 #    echo "Loading remaining individual blocks..."
 #    for file in $(ls /blocks | sort -n); do
 #        echo "Importing " $file
-#        $reth $FLAGS import /blocks/$file
+#        $reth node $FLAGS --import /blocks/$file
 #    done
 #else
 #    echo "Warning: blocks folder not found."
 #fi
 
-set -e
+set -ex
 
 # Configure any mining operation
 # TODO
