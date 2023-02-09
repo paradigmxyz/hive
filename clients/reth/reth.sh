@@ -34,7 +34,7 @@
 #  - HIVE_MINER_EXTRA          extra-data field to set for newly minted blocks
 
 # Immediately abort the script on any error encountered
-set -e
+set -ex
 
 reth=/usr/local/bin/reth
 
@@ -70,10 +70,6 @@ jq -f /mapper.jq /genesis-input.json > /genesis.json
 echo "Supplied genesis state:"
 cat /genesis.json
 
-ls -hal $reth
-
-$reth --help
-
 echo "Command flags till now:"
 echo $FLAGS
 
@@ -85,14 +81,13 @@ $reth init $FLAGS --chain /genesis.json
 FLAGS="$FLAGS --chain /genesis.json"
 
 # Don't immediately abort, some imports are meant to fail
-set +e
+set +ex
 
 # Load the test chain if present
-# TODO
 echo "Loading initial blockchain..."
 if [ -f /chain.rlp ]; then
     echo "Loading initial blockchain..."
-    $reth node $FLAGS --import /chain.rlp
+    $reth import $FLAGS --path /chain.rlp
 else
     echo "Warning: chain.rlp not found."
 fi
@@ -104,7 +99,7 @@ fi
 #    echo "Loading remaining individual blocks..."
 #    for file in $(ls /blocks | sort -n); do
 #        echo "Importing " $file
-#        $reth node $FLAGS --import /blocks/$file
+#        $reth import $FLAGS --path /blocks/$file
 #    done
 #else
 #    echo "Warning: blocks folder not found."
