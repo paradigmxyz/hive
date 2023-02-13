@@ -1,5 +1,5 @@
 ARG branch=main
-FROM paradigmxyz/reth:$branch
+FROM --platform=linux/amd64 paradigmxyz/reth:$branch
 
 # Install script tools.
 RUN apk add --update bash curl jq
