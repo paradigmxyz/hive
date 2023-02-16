@@ -2,7 +2,8 @@ ARG branch=main
 FROM paradigmxyz/reth:$branch
 
 # Install script tools.
-RUN apk add --update bash curl jq
+RUN apt-get update -y
+RUN apt-get install -y bash curl jq
 
 # Add genesis mapper script.
 ADD genesis.json /genesis.json
