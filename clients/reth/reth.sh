@@ -144,4 +144,4 @@ FLAGS="$FLAGS --nat none"
 
 # Launch the main client.
 echo "Running reth with flags: $FLAGS"
-$reth node $FLAGS
+$reth node $FLAGS --debug.tip 0xc95596f4707fb382554b660b4847c599eb5f8fdcf99be2c5654aaadd4ec97840
