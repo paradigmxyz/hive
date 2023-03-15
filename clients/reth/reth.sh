@@ -146,6 +146,12 @@ if [ "$HIVE_MINER" == "" ]; then
 fi
 
 
+# Enable continuous sync if mining is disabled
+# TODO
+# if [ "$HIVE_MINER" == "" ]; then
+#     FLAGS="$FLAGS --debug.continuous"
+# fi
+
 if [ "$HIVE_TERMINAL_TOTAL_DIFFICULTY" != "" ]; then
     JWT_SECRET="7365637265747365637265747365637265747365637265747365637265747365"
     echo -n $JWT_SECRET > /jwt.secret
