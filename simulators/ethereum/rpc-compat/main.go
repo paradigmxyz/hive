@@ -34,6 +34,7 @@ var (
 		"HIVE_FORK_ISTANBUL":       "0",
 		"HIVE_FORK_BERLIN":         "0",
 		"HIVE_FORK_LONDON":         "0",
+		"HIVE_SHANGHAI_TIMESTAMP":  "0",
 	}
 	files = map[string]string{
 		"genesis.json": "./tests/genesis.json",
