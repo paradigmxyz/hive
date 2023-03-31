@@ -138,11 +138,17 @@ func runTest(t *hivesim.T, c *hivesim.Client, data []byte) error {
 				return fmt.Errorf("failed to unmarshal value: %s\n", err)
 			}
 
-			// If errors exist in both, make them equal.
-			// While error comparison might be desirable, error text across
-			// clients is not standardized, so we should not compare them.
-			if wantMap["error"] != nil && respMap["error"] != nil {
-				respMap["error"] = wantMap["error"]
+			if c.Type == "reth" {
+				// If errors exist in both, make them equal.
+				// While error comparison might be desirable, error text across
+				// clients is not standardized, so we should not compare them.
+				if wantMap["error"] != nil && respMap["error"] != nil {
+					respError := respMap["error"].(map[string]interface{})
+					wantError := wantMap["error"].(map[string]interface{})
+					respError["message"] = wantError["message"]
+					// cast back into the any type
+					respMap["error"] = respError
+				}
 			}
 
 			// Now compare.
