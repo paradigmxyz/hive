@@ -126,11 +126,28 @@ func runTest(t *hivesim.T, c *hivesim.Client, data []byte) error {
 				return fmt.Errorf("invalid test, response before request")
 			}
 			want := []byte(strings.TrimSpace(line)[3:]) // trim leading "<< "
-			// Now compare.
-			d, err := diff.New().Compare(resp, want)
-			if err != nil {
+
+			// Unmarshal to map[string]interface{} to compare.
+			var wantMap map[string]interface{}
+			if err := json.Unmarshal(want, &wantMap); err != nil {
 				return fmt.Errorf("failed to unmarshal value: %s\n", err)
 			}
+
+			var respMap map[string]interface{}
+			if err := json.Unmarshal(resp, &respMap); err != nil {
+				return fmt.Errorf("failed to unmarshal value: %s\n", err)
+			}
+
+			// If errors exist in both, make them equal.
+			// While error comparison might be desirable, error text across
+			// clients is not standardized, so we should not compare them.
+			if wantMap["error"] != nil && respMap["error"] != nil {
+				respMap["error"] = wantMap["error"]
+			}
+
+			// Now compare.
+			d := diff.New().CompareObjects(respMap, wantMap)
+
 			// If there is a discrepancy, return error.
 			if d.Modified() {
 				var got map[string]interface{}
